@@ -1,32 +1,39 @@
 #!/usr/bin/env bash
-# core/checks.sh - Verificações de ambiente e sistema
+# core/ui.sh - Componentes de interface: banners, spinners, etc.
 set -euo pipefail
 
-check_internet() {
-    log_info "Verificando conexão com a internet..."
-    if ping -c 1 8.8.8.8 &>/dev/null; then
-        log_success "Internet funcionando!"
-    else
-        log_error "Sem conexão com a internet. O gatinho precisa de rede."
-        exit 1
-    fi
+show_banner() {
+    clear
+    echo -e "${PINK}"
+    cat << "EOF"
+╔══════════════════════════════════════════╗
+║           🐱  CATTOOL v1.0  🐱          ║
+║        Termux Installer & Toolbox       ║
+╚══════════════════════════════════════════╝
+EOF
+    echo -e "${NC}"
+    echo -e "${LAVENDER}   /\\_/\\"
+    echo -e "  ( o.o )   \"Ronronando pacotes...\""
+    echo -e "   > ^ <${NC}"
+    echo ""
 }
 
-check_storage() {
-    local available
-    available=$(df -BM /data | awk 'NR==2 {print $4}' | sed 's/M//')
-    if [[ "$available" -lt 500 ]]; then
-        log_warning "Espaço em disco baixo (${available}MB). Algumas ferramentas podem falhar."
-    else
-        log_success "Espaço OK (${available}MB livres)."
-    fi
+show_spinner() {
+    local message="$1"
+    local pid="$2"
+    local delay=0.1
+    local spinstr='|/-\'
+    log_info "$message"
+    while kill -0 "$pid" 2>/dev/null; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
 }
 
-ensure_path() {
-    local dir="$1"
-    mkdir -p "$dir"
-    if [[ ":$PATH:" != *":$dir:"* ]]; then
-        export PATH="$dir:$PATH"
-        log_info "PATH atualizado com $dir"
-    fi
+show_separator() {
+    echo -e "${PINK}────────────────────────────────────────${NC}"
 }

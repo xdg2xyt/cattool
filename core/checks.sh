@@ -14,7 +14,12 @@ check_internet() {
 
 check_storage() {
     local available
-    available=$(df -BM /data | awk 'NR==2 {print $4}' | sed 's/M//')
+    # Termux usa df do toybox/busybox - compatível com POSIX
+    available=$(df /data | awk 'NR==2 {print $4}')
+    
+    # Converte para MB (assumindo que está em KB)
+    available=$((available / 1024))
+    
     if [[ "$available" -lt 500 ]]; then
         log_warning "Espaço em disco baixo (${available}MB). Algumas ferramentas podem falhar."
     else

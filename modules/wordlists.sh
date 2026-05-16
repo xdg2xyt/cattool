@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 # modules/wordlists.sh - Wordlists essenciais
 set -euo pipefail

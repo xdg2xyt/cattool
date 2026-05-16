@@ -5,9 +5,20 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Define diretório base do CATTOOL
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Define diretório base do CATTOOL (forma robusta)
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
 export CATTOOL_HOME="$SCRIPT_DIR"
+
+# Debug opcional (remova o # para depurar)
+# echo "CATTOOL_HOME=$CATTOOL_HOME"
+# ls -la "$CATTOOL_HOME/core/"
+
+# Verifica se os diretórios existem
+if [[ ! -d "$CATTOOL_HOME/core" ]]; then
+    echo "[ERRO] Diretório core/ não encontrado em $CATTOOL_HOME"
+    echo "Certifique-se de executar o script do diretório raiz do CATTOOL."
+    exit 1
+fi
 
 # Carrega core libraries
 source "$CATTOOL_HOME/core/colors.sh"
@@ -37,7 +48,7 @@ check_internet
 check_storage
 log_success "Ambiente pronto para receber carinho felino."
 
-# Atualização dos repositórios Termux (silenciosa, rápida)
+# Atualização dos repositórios Termux
 log_info "Atualizando lista de pacotes (pkg update)..."
 run_with_spinner "Atualizando pkg" pkg update -y
 log_success "Lista de pacotes atualizada."
