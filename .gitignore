@@ -1,0 +1,37 @@
+# 🐱 CATTOOL .gitignore
+
+# Logs gerados automaticamente
+logs/
+
+# Wordlists (podem ser grandes e facilmente obtidas)
+wordlists/
+!wordlists/.gitkeep
+
+# Arquivos temporários do sistema
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Backups do bashrc
+*.bashrc.bak
+*.bashrc~
+
+# Arquivos de configuração locais (se houver)
+.env
+*.local
+
+# Diretório de ferramentas clonadas localmente (opcional)
+tools/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Go (se compilar localmente, mas geralmente é no $HOME/go)
+go/
+
+# Arquivos de lock que podem ser gerados
+*.lock
