@@ -15,6 +15,6 @@ Installer modular e elegante para Termux.
 pkg update -y
 pkg install git -y
 
-git clone 
+git clone https://github.com/xdg2xyt/cattool 
 cd cattool
 bash install.sh
